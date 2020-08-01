@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ApiService } from '../api.service';
+import { TodoStore } from '../state/store';
+import { TodoQuery } from '../state/query';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-todo',
@@ -9,7 +13,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class AddTodoComponent implements OnInit {
   form: FormGroup;
 
-  constructor() {
+  constructor(private apiService: ApiService,
+              private todoStore: TodoStore,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -21,6 +27,21 @@ export class AddTodoComponent implements OnInit {
 
   addTodo() {
     console.log(this.form.value);
+    this.todoStore.setLoading(true);
+    this.apiService.addTodo(this.form.controls.title.value,
+      this.form.controls.description.value).subscribe(res => {
+      this.todoStore.update(state => {
+        return {
+          todos: [
+            ...state.todos,
+            res
+          ]
+        };
+      });
+      this.todoStore.setLoading(false);
+      this.router.navigateByUrl('');
+    });
+
   }
 
 }
