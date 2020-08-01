@@ -28,7 +28,7 @@ export class ApiService {
     return this.http.delete<Todo>(`${this.baseUrl}/${id}`);
   }
 
-  updateTodo(id: string, changes: Todo): Observable<Todo> {
+  updateTodo(id: string, changes: any): Observable<Todo> {
     return this.http.put<Todo>(`${this.baseUrl}/${id}`, changes);
   }
 }

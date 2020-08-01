@@ -8,8 +8,12 @@
   <mat-spinner *ngIf="loading"></mat-spinner>
   <ng-container *ngIf="!loading">
     <mat-card *ngFor="let todo of todos">
-      <p>{{todo.title}}</p>
-      <button mat-stroked-button color="primary">Mark as Complete</button>
+      <p [ngClass]="{complete:todo.status === 'done'}">{{todo.title}}</p>
+      <button *ngIf="todo.status==='open'" (click)="markAsComplete(todo._id)" mat-stroked-button color="primary">Mark as
+        Complete
+      </button>
+      <button *ngIf="todo.status==='done'" (click)="deleteTodo(todo._id)" mat-stroked-button color="primary">Delete
+      </button>
     </mat-card>
   </ng-container>
 
